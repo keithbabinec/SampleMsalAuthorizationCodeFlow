@@ -14,7 +14,7 @@ namespace MsalAuthorizationCodeFlowApi.Controllers
         // users and groups.
         [HttpGet()]
         [Route("admin")]
-        [Authorize(Roles = "AdminUser")]
+        [Authorize(Roles = "MyAppAdministratorsRole")]
         public async Task<ActionResult<string>> AdminRoleGet()
         {
             // simulate some activity then return a result.
@@ -29,7 +29,7 @@ namespace MsalAuthorizationCodeFlowApi.Controllers
         // users and groups.
         [HttpGet()]
         [Route("standard")]
-        [Authorize(Roles = "StandardUser")]
+        [Authorize(Roles = "MyAppUsersRole")]
         public async Task<ActionResult<string>> StandardRoleGet()
         {
             // simulate some activity then return a result.
