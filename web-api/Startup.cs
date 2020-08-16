@@ -1,10 +1,9 @@
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Identity.Web;
 
 namespace MsalAuthorizationCodeFlowApi
 {
@@ -22,9 +21,9 @@ namespace MsalAuthorizationCodeFlowApi
         {
             // add authentication support (bearer token validation).
             // configuration values are pulled from "AzureAD" section of app settings config.
+            // this uses Microsoft Identity platform (AAD v2.0).
 
-            services.AddAuthentication(AzureADDefaults.JwtBearerAuthenticationScheme)
-                .AddAzureADBearer(options => Configuration.Bind("AzureAD", options));
+            services.AddMicrosoftWebApiAuthentication(Configuration, "AzureAd");
 
             // add authorization support.
 
