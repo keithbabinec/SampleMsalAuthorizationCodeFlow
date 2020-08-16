@@ -3,7 +3,7 @@ param
 (
     [Parameter(
         Mandatory=$true,
-        HelpMessage="Specify the Azure AD RBAC group names to create. For example: MyAppUsers and MyAppAdministrators.")]
+        HelpMessage="Specify the Azure AD RBAC group names to create. For example: MyAppUsersGroup and MyAppAdministratorsGroup.")]
     [System.String[]]
     $RbacGroupNames
 )

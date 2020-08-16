@@ -7,6 +7,12 @@ param
     [System.String]
     $AppRegistrationName,
 
+    [Parameter(
+        Mandatory=$true,
+        HelpMessage="Specify the Azure AD RBAC role names to use in the app manifest. For example: MyAppUsersRole and MyAppAdministratorsRole.")]
+    [System.String[]]
+    $RbacRoleNames,
+
     [Parameter(Mandatory=$false)]
     [System.String]
     $AppHomePageUrl = "https://localhost:3000/"
@@ -22,7 +28,7 @@ if ($accounts -contains "az login")
 }
 else
 {
-    Write-Host "Already logged into Azure CLI tooling."    
+    Write-Host "Already logged into Azure CLI tooling."
 }
 
 Write-Host "Checking to see if the Azure AD app registration ($AppRegistrationName) already exists."
@@ -50,6 +56,29 @@ if ($appRegistration -eq $cliEmptyResult)
     # for the token. make a second call to update the app manifest just for this property.
 
     $null = az ad app update --id $appRegistration.appId --set oauth2AllowImplicitFlow=false --set oauth2AllowIdTokenImplicitFlow=false
+
+    Write-Host "Adding RBAC roles to the application manifest."
+
+    $roleObjects = New-Object -TypeName 'System.Collections.Generic.List[PSCustomObject]'
+
+    foreach ($roleName in $RbacRoleNames)
+    {
+        $newRole = [PSCustomObject]@{
+            allowedMemberTypes = @("User")
+            description = $roleName
+            displayName = $roleName
+            isEnabled = "true"
+            value = $roleName
+        }
+
+        $roleObjects.Add($newRole)
+    }
+
+    $roleObjects | ConvertTo-Json | Out-File .\manifest-roles.json
+
+    $null = az ad app update --id $appRegistration.appId --app-roles @manifest-roles.json
+
+    Remove-Item -Path .\manifest-roles.json
 
     Write-Host "App registration setup completed."
 }
