@@ -14,9 +14,16 @@ param
 
 $ErrorActionPreference = "Stop"
 
-Write-Host "Logging into Azure for the Azure CLI tooling."
-
-az login --allow-no-subscriptions
+$accounts = az account list
+if ($accounts -contains "az login")
+{
+    Write-Host "Logging into Azure for the Azure CLI tooling."
+    az login --allow-no-subscriptions
+}
+else
+{
+    Write-Host "Already logged into Azure CLI tooling."    
+}
 
 Write-Host "Checking to see if the Azure AD app registration ($AppRegistrationName) already exists."
 
