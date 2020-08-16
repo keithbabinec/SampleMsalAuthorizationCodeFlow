@@ -1,26 +1,42 @@
 [CmdletBinding()]
 param
 (
-    [Parameter(Mandatory=$false)]
-    [System.String]
-    $AzureAdVersion = "2.0.2.106"
 )
 
-Write-Host "Checking for Azure module prerequisites."
+#Requires -RunAsAdministrator
 
-if ($PSEdition -eq "Core")
+$ErrorActionPreference = "Stop"
+
+Write-Host "Checking for Azure CLI tooling prerequisite."
+
+# install the Azure CLI tools
+
+try
 {
-    throw "The AzureAD PowerShell module is not supported in PowerShell Core. Please run this script from a Windows PowerShell (5.1) instance."
+    $null = az --version
+    $cliToolsInstalled = $true
+}
+catch [System.Management.Automation.CommandNotFoundException]
+{
+    $cliToolsInstalled = $false
 }
 
-# install the AzureAd PowerShell module
-
-if ((Get-Module -ListAvailable -Name AzureAd) -eq $null)
+if ($cliToolsInstalled -eq $false)
 {
-    Write-Host "Installing AzureAd module version $AzureAdVersion."
-    Install-Module -Name AzureAd -RequiredVersion $AzureAdVersion -Force -Scope CurrentUser
+    Write-Host "Azure CLI tooling was not found. Installing the latest version now."
+
+    Write-Host "Downloading Azure CLI installer."
+    Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile .\AzureCLI.msi
+
+    Write-Host "Running Azure CLI installer."
+    Start-Process msiexec.exe -Wait -ArgumentList '/I AzureCLI.msi /quiet'
+
+    Write-Host "Removing Azure CLI installer file."
+    Remove-Item .\AzureCLI.msi
+
+    Write-Host "Installation completed. You should restart PowerShell to ensure the 'az' commands are available in the path."
 }
 else
 {
-    Write-Host 'AzureAD module is already installed.'
+    Write-Host 'Azure CLI tooling is already installed.'
 }
