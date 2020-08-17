@@ -1,17 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import App from './Components/App/App';
+import AuthFailure from './Components/AuthFailure/AuthFailure';
+import AuthService from './Services/AuthService';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+// Security Warning: Be aware that this code sample uses the browser's sessionStorage to store tokens. 
+// This means the token could be extracted if the site is vulnerable to an XSS attack or if 
+// untrusted/malicious scripts are executed in your web app. Keep this in mind when using this authentication flow.
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+let authService = new AuthService();
+
+authService.HandlePageLoadEvent().then(() => {
+    // auth flow was successful.
+    // start the application now.
+    ReactDOM.render(<App authServiceInstance={authService} />, document.getElementById('root'));
+}).catch((error) => {
+    // auth flow has failed.
+    // display an error instead of starting the main application.
+    ReactDOM.render(<AuthFailure errorMessage={error} />, document.getElementById('root'));
+});
