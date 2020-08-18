@@ -1,5 +1,5 @@
 interface IAuthFailureProps {
-    errorMessage: string
+    errorMessage: string;
 };
   
 export default IAuthFailureProps;

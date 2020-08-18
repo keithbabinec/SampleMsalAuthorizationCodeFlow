@@ -8,6 +8,7 @@ class NotSignedIn extends React.Component<INotSignedInProps, {}> {
                 <p>
                     User is not logged in.
                 </p>
+                <button onClick={this.props.loginButtonClicked} >Sign In</button>
             </div>
         );
     }

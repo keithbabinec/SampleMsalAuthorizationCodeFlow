@@ -5,6 +5,11 @@ import SignedIn from '../SignedIn/SignedIn';
 import NotSignedIn from '../NotSignedIn/NotSignedIn';
 
 class App extends React.Component<IAppProps, {}> {
+
+    handleSignInEvent = () => {
+        this.props.authServiceInstance.SignIn();
+    }
+
     render() {
         if (this.props.authServiceInstance.userName) {
             return (
@@ -16,7 +21,7 @@ class App extends React.Component<IAppProps, {}> {
         else {
             return (
                 <div className="App">
-                    <NotSignedIn authServiceInstance={this.props.authServiceInstance} />
+                    <NotSignedIn authServiceInstance={this.props.authServiceInstance} loginButtonClicked={this.handleSignInEvent} />
                 </div>
             );
         }

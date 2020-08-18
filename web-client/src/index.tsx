@@ -18,5 +18,5 @@ authService.HandlePageLoadEvent().then(() => {
 }).catch((error) => {
     // auth flow has failed.
     // display an error instead of starting the main application.
-    ReactDOM.render(<AuthFailure errorMessage={error} />, document.getElementById('root'));
+    ReactDOM.render(<AuthFailure errorMessage={error.stack} />, document.getElementById('root'));
 });
