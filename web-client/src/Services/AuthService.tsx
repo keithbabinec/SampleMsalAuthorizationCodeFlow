@@ -72,7 +72,7 @@ class AuthService {
 
     SignIn() {
         let loginRedirectRequestPayload: msal.RedirectRequest = {
-            scopes: [ "openid", "profile", "User.Read" ],
+            scopes: [ this.appSettings.GetMsalClientScope() ],
             prompt: "select_account"
         }
 

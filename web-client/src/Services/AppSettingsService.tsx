@@ -2,6 +2,9 @@ class AppSettingsService {
     GetMsalClientId(): string {
         return process.env.REACT_APP_MSAL_CLIENT_ID as string;
     }
+    GetMsalClientScope(): string {
+        return process.env.REACT_APP_MSAL_CLIENT_SCOPE as string;
+    }
     GetMsalTenantAuthorityUri(): string {
         return process.env.REACT_APP_MSAL_TENANT_AUTHORITY_URI as string;
     }
