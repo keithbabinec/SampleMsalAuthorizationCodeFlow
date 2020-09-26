@@ -61,6 +61,11 @@ if ($appRegistration -eq $cliEmptyResult)
     Write-Host "Setting manifest property: oauth2AllowIdTokenImplicitFlow=false"
     $null = az ad app update --id $appRegistration.appId --set oauth2AllowIdTokenImplicitFlow=false
 
+    $appIdUri = 'api://{0}' -f $appRegistration.appId
+    Write-Host "Setting App ID Uri: $appIdUri"
+    # note this also adds a default app scope: user_impersonation
+    $null = az ad app update --id $appRegistration.appId --identifier-uris $appIdUri
+
     Write-Host "Adding RBAC roles to the application manifest."
     $roleObjects = New-Object -TypeName 'System.Collections.Generic.List[PSCustomObject]'
 
@@ -78,9 +83,7 @@ if ($appRegistration -eq $cliEmptyResult)
     }
 
     $roleObjects | ConvertTo-Json | Out-File .\manifest-roles.json
-
     $null = az ad app update --id $appRegistration.appId --app-roles @manifest-roles.json
-
     Remove-Item -Path .\manifest-roles.json
 
     Write-Host "App registration setup completed."
