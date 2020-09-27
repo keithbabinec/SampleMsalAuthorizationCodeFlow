@@ -41,3 +41,4 @@ foreach ($groupName in $RbacGroupNames)
 }
 
 Write-Host "Group setup has completed."
+Write-Host "ACTION REQUIRED: In Azure AD Groups, add at least one user to each of the role groups created."

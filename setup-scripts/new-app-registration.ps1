@@ -87,6 +87,8 @@ if ($appRegistration -eq $cliEmptyResult)
     Remove-Item -Path .\manifest-roles.json
 
     Write-Host "App registration setup completed."
+
+    Write-Host "ACTION REQUIRED: In the Azure AD app registration, click on the Authentication page then add at least one redirect URI of type SPA"
 }
 else
 {

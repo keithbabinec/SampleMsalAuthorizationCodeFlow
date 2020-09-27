@@ -42,6 +42,9 @@ if ($appServicePrincipal -eq $cliEmptyResult)
     az ad sp create --id $appRegistrationId
 
     Write-Host "App service principal setup completed."
+
+    Write-Host "ACTION REQUIRED: In the Azure AD app service principal (enterprise application), click on the Properties page, then set the User Assignment Required field to Yes"
+    Write-Host "ACTION REQUIRED: In the Azure AD app service principal (enterprise application), click on the Users and Groups page, then assign users or groups to the custom app roles you have defined"
 }
 else
 {
