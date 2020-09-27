@@ -90,4 +90,18 @@ The following additional manual steps are required because no reasonable Azure t
 
 4. When the application starts in the browser:
     * Click the 'login' button, which will redirect you to the Microsoft Identity platform to sign in.
+    * Sign in with a user that has been assigned to one of your app roles.
     * Upon redirect you should see buttons to invoke the 3 test web api endpoints.
+    * Invoke the test endpoints to validate the end-to-end flow.
+
+## Screenshots
+
+![auth-code-flow-1](img/auth-code-flow-1.png)
+
+![auth-code-flow-2](img/auth-code-flow-2.png)
+
+![auth-code-flow-3](img/auth-code-flow-3.png)
+
+![auth-code-flow-4](img/auth-code-flow-4.png)
+
+![auth-code-flow-5](img/auth-code-flow-5.png)
