@@ -21,7 +21,7 @@ namespace MsalAuthorizationCodeFlowApi.Controllers
 
             await Task.Delay(TimeSpan.FromMilliseconds(50)).ConfigureAwait(false);
             
-            return Ok("Successfully called the api/test/admin endpoint.");
+            return Ok("Successfully called the api/test/admin endpoint, user has correct (admin) authorization.");
         }
 
         // this is a sample endpoint that requires 'StandardUser' role access,
@@ -36,7 +36,7 @@ namespace MsalAuthorizationCodeFlowApi.Controllers
 
             await Task.Delay(TimeSpan.FromMilliseconds(50)).ConfigureAwait(false);
 
-            return Ok("Successfully called the api/test/standard endpoint.");
+            return Ok("Successfully called the api/test/standard endpoint, user has correct (standard) authorization.");
         }
 
         // this is a sample endpoint that requires no authentication at all.
@@ -49,7 +49,7 @@ namespace MsalAuthorizationCodeFlowApi.Controllers
 
             await Task.Delay(TimeSpan.FromMilliseconds(50)).ConfigureAwait(false);
 
-            return Ok("Successfully called the api/test/noauth endpoint.");
+            return Ok("Successfully called the api/test/noauth endpoint, as an unauthenticated/anonymous user.");
         }
     }
 }
