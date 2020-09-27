@@ -1,4 +1,7 @@
 class AppSettingsService {
+    GetWebApiBaseUri(): string {
+        return process.env.REACT_APP_WEB_API_BASE_URI as string;
+    }
     GetMsalClientId(): string {
         return process.env.REACT_APP_MSAL_CLIENT_ID as string;
     }
