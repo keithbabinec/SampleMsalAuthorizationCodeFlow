@@ -8,7 +8,7 @@ An example project to demonstrate the OAuth 2.0 authorization code flow against 
 
 ## Tutorial Post
 
-For an end-to-end walkthrough and frequently asked questions, visit the linked blog post: [LINK-TBD]
+For an end-to-end walkthrough and frequently asked questions, visit the linked blog post: https://keithbabinec.com/2020/09/27/oauth-2-0-authorization-code-flow-with-a-react-spa-asp-net-core-web-api-rbac-roles-and-msal
 
 ## Azure AD configuration
 
