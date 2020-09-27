@@ -1,37 +1,42 @@
 import AppSettingsService from './AppSettingsService';
-import * as msal from "@azure/msal-browser"
+import { AccountInfo, Configuration, AuthenticationResult, PublicClientApplication, SilentRequest, RedirectRequest, EndSessionRequest } from "@azure/msal-browser"
 
 class AuthService {
 
-    constructor() {
-        this.appSettings = new AppSettingsService();
+    constructor(appSettings: AppSettingsService) {
+        if (!appSettings) {
+            throw new Error('the app settings service was not provided');
+        }
+        
+        this.appSettings = appSettings;
         
         let msalConfig = this.GetMsalClientConfiguration();
-        this.msalApplication = new msal.PublicClientApplication(msalConfig);
+        this.msalApplication = new PublicClientApplication(msalConfig);
     }
 
     // msal application object
-    msalApplication: msal.PublicClientApplication;
+    msalApplication: PublicClientApplication;
 
     // settings service
     appSettings: AppSettingsService;
 
-    userName: string = "";
+    // cached account info
+    account?: AccountInfo;
 
     HandlePageLoadEvent(): Promise<void> {
         // let exceptions bubble up to the caller to handle
-        return this.msalApplication.handleRedirectPromise().then((authResult: msal.AuthenticationResult | null) => {
+        return this.msalApplication.handleRedirectPromise().then((authResult: AuthenticationResult | null) => {
             this.HandleRedirectResponse(authResult);
         });
     }
 
-    HandleRedirectResponse(authResult: msal.AuthenticationResult | null): void {
+    HandleRedirectResponse(authResult: AuthenticationResult | null): void {
         // if this page load is redirect from the Microsoft Identity platform then the
         // authResult will be populated. Otherwise null on other page loads.
 
         if (authResult !== null) {
-            // update the username.
-            this.userName = authResult.account.username;
+            // save the fresh account info from the result.
+            this.account = authResult.account;
         }
         else {
             // see if we have cached accounts.
@@ -46,17 +51,19 @@ class AuthService {
                 // there are some situations where the user may have multiple (different) cached logins.
                 // this code sample does not cover that scenario but just logs a warning here.
                 // this conditional block would need to be updated to support multiple accounts.
+                // otherwise it will just grab the first one below.
                 console.warn("Multiple accounts detected in MSAL account cache.");
+                this.account = currentAccounts[0];
             }
             else if (currentAccounts.length === 1) {
                 // we have exactly 1 cached account.
-                // set the username. user may not need to sign in.
-                this.userName = currentAccounts[0].username;
+                // set the account info. user may not need to sign in.
+                this.account = currentAccounts[0];
             }
         }
     }
 
-    GetMsalClientConfiguration(): msal.Configuration {
+    GetMsalClientConfiguration(): Configuration {
         return {
             auth: {
                 clientId: this.appSettings.GetMsalClientId(),
@@ -70,8 +77,19 @@ class AuthService {
         }
     }
 
+    GetToken(): Promise<AuthenticationResult> {
+        let tokenRequest: SilentRequest = {
+            account: this.account as AccountInfo,
+            scopes: [ this.appSettings.GetMsalClientScope() ]
+        }
+
+        // msal will return the cached token if present, or call to get a new one
+        // if it is expired or near expiring.
+        return this.msalApplication.acquireTokenSilent(tokenRequest);
+    }
+
     SignIn() {
-        let loginRedirectRequestPayload: msal.RedirectRequest = {
+        let loginRedirectRequestPayload: RedirectRequest = {
             scopes: [ this.appSettings.GetMsalClientScope() ],
             prompt: "select_account"
         }
@@ -82,10 +100,15 @@ class AuthService {
     }
 
     SignOut() {
-        let accountInfo: msal.AccountInfo | null = this.msalApplication.getAccountByUsername(this.userName);
+        if (!this.account) {
+            // no cached login to signout
+            return;
+        }
+
+        let accountInfo: AccountInfo | null = this.msalApplication.getAccountByUsername(this.account?.username as string);
 
         if (accountInfo !== null) {
-            let logoutRequestPayload: msal.EndSessionRequest = {
+            let logoutRequestPayload: EndSessionRequest = {
                 account: accountInfo
             }
     
