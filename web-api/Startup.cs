@@ -23,7 +23,7 @@ namespace MsalAuthorizationCodeFlowApi
             // configuration values are pulled from "AzureAD" section of app settings config.
             // this uses Microsoft Identity platform (AAD v2.0).
 
-            services.AddMicrosoftWebApiAuthentication(Configuration, "AzureAd");
+            services.AddMicrosoftIdentityWebApiAuthentication(Configuration, "AzureAd");
 
             // add authorization support.
 
