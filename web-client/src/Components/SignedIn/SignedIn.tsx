@@ -18,6 +18,9 @@ class SignedIn extends React.Component<ISignedInProps, {}> {
                 <div className="buttonDiv">
                     <button onClick={this.props.apiAdminEndpointButtonClicked}>Invoke API: Admin endpoint</button>
                 </div>
+                <div className="buttonDiv">
+                    <button onClick={this.props.logoutButtonClicked}>Sign Out</button>
+                </div>
             </div>
         );
     }

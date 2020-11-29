@@ -20,6 +20,10 @@ class App extends React.Component<IAppProps, IAppState> {
         this.props.authServiceInstance.SignIn();
     }
 
+    invokeSignOutEvent = () => {
+        this.props.authServiceInstance.SignOut();
+    }
+
     invokeUnauthenticatedApiCall = () => {
         this.props.apiService.InvokeNoAuthApiCall().then((response: any) => {
             this.setState({'apiResult': response, 'apiError': ''});
@@ -52,7 +56,8 @@ class App extends React.Component<IAppProps, IAppState> {
                         authServiceInstance={this.props.authServiceInstance}
                         apiUnauthenticatedButtonClicked={this.invokeUnauthenticatedApiCall}
                         apiUserEndpointButtonClicked={this.invokeUserEndpointApiCall}
-                        apiAdminEndpointButtonClicked={this.invokeAdminEndpointApiCall} />
+                        apiAdminEndpointButtonClicked={this.invokeAdminEndpointApiCall}
+                        logoutButtonClicked={this.invokeSignOutEvent} />
                     {
                         this.state.apiResult &&
                         <div>API Operation Output: {this.state.apiResult}</div>
