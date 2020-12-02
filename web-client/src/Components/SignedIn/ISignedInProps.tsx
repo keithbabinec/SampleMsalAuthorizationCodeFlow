@@ -5,6 +5,7 @@ interface ISignedInProps {
     apiUnauthenticatedButtonClicked: React.MouseEventHandler;
     apiUserEndpointButtonClicked: React.MouseEventHandler;
     apiAdminEndpointButtonClicked: React.MouseEventHandler;
+    logoutButtonClicked: React.MouseEventHandler;
 };
   
 export default ISignedInProps;
